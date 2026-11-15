@@ -70,6 +70,10 @@ runs:
           echo "Reverting super.c Android 14 6.1 Fake Patch"
           sed -i '/^#include "internal.h"$/a #include <trace/hooks/fs.h>' fs/super.c
         fi
+        if [ "${{ inputs.sublevel }}" -lt "157" ]; then
+          echo "Removing namespace.c blk.h context line for Android 14 6.1 (sublevel < 157)"
+          sed -i '/^#include <trace\/hooks\/blk.h>$/d' fs/namespace.c
+        fi
 
     - name: Revert Android 15 6.6 Fake Patches
       shell: bash

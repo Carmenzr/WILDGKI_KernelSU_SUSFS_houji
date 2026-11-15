@@ -102,6 +102,13 @@ runs:
           echo "Applying super.c Android 14 6.1 Fake Patch"
           sed -i '/^#include <trace\/hooks\/fs.h>$/,+1 d' fs/super.c
         fi
+        # Newer SUSFS patches are generated on a tree that already has
+        # trace/hooks/blk.h in namespace.c. Older sublevels lack it, so add it
+        # as context before patching; the revert step removes it again.
+        if [ "${{ inputs.sublevel }}" -lt "157" ] && grep -q '^ #include <trace/hooks/blk.h>$' 50_add_susfs_in_gki-android14-6.1.patch && ! grep -q 'trace/hooks/blk.h' fs/namespace.c; then
+          echo "Adding namespace.c blk.h context line for Android 14 6.1 (sublevel < 157)"
+          sed -i '/^#include "internal.h"$/a #include <trace/hooks/blk.h>' fs/namespace.c
+        fi
 
     - name: Apply Android 15 6.6 Fake Patches
       shell: bash
