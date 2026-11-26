@@ -237,7 +237,7 @@ jobs:
           PIN_NOMOUNT="5a610db7649a59eb3e3d710653618d594941f8da"
           PIN_KERNELSU="08a3b087e49227c8a6731c5f1114998b5e25255b"
           PIN_RESUKISU="5d6d1843c8937f5ff2a145dc89a0cf46030ae6f8"
-          PIN_SUKISU_ULTRA="4bec532dd447e2852aa8932afa768255350c103a"
+          PIN_SUKISU_ULTRA="adf6e86d55229ad78a5f7758bdc43d92fd1c3729"
           declare -A PIN_SUSFS=(
             [susfs_commit_android12_5_10]="9892175b4acec7ee844e113b8d02c0f4d12cdfac"
             [susfs_commit_android13_5_10]="5326e21a7eb232f9e21debdd5164e99bee3d1e2f"
@@ -301,11 +301,11 @@ jobs:
           if [ "${{ inputs.use_susfs }}" = "true" ]; then
             KERNELSU_COMMIT="$(pick "$PIN_KERNELSU" https://github.com/tiann/KernelSU.git refs/heads/main)"
             RESUKISU_COMMIT="$(pick "$PIN_RESUKISU" https://github.com/ReSukiSU/ReSukiSU.git refs/heads/main)"
-            SUKISU_ULTRA_COMMIT="$(pick "$PIN_SUKISU_ULTRA" https://github.com/SukiSU-Ultra/SukiSU-Ultra.git refs/heads/builtin)"
+            SUKISU_ULTRA_COMMIT="$(pick "$PIN_SUKISU_ULTRA" https://git.zako.shirkneko.top:20004/shirkneko/SukiSU.git refs/heads/builtin)"
           else
             KERNELSU_COMMIT="$(resolve_sha https://github.com/tiann/KernelSU.git refs/heads/main)"
             RESUKISU_COMMIT="$(resolve_sha https://github.com/ReSukiSU/ReSukiSU.git refs/heads/main)"
-            SUKISU_ULTRA_COMMIT="$(resolve_sha https://github.com/SukiSU-Ultra/SukiSU-Ultra.git refs/heads/main)"
+            SUKISU_ULTRA_COMMIT="$(resolve_sha https://git.zako.shirkneko.top:20004/shirkneko/SukiSU.git refs/heads/main)"
           fi
           emit ksu_commit "$KERNELSU_COMMIT"
           emit resukisu_commit "$RESUKISU_COMMIT"
@@ -484,7 +484,7 @@ jobs:
                 ;;
               sukisu-ultra)
                 owner="SukiSU-Ultra"; repo="SukiSU-Ultra"; wf="build-manager.yml"
-                stock=$(git ls-remote https://github.com/SukiSU-Ultra/SukiSU-Ultra.git refs/heads/main | awk '{print $1; exit}')
+                stock=$(git ls-remote https://git.zako.shirkneko.top:20004/shirkneko/SukiSU.git refs/heads/main | awk '{print $1; exit}')
                 run_id=$(gh api "repos/${owner}/${repo}/actions/workflows/${wf}/runs?head_sha=${stock}" \
                   --jq '.workflow_runs[0].id // empty')
                 if [[ -z "${run_id}" ]]; then
